@@ -1,0 +1,199 @@
+//loading constants to r7,8,9,10
+SWAPA:R11,R16
+LOAD:R10,R11
+SWAPA:R11,R16
+SWAPA:R11,R17
+LOAD:R8,R11
+SWAPA:R11,R17
+SWAPA:R11,R18
+LOAD:R9,R11
+SWAPA:R11,R18
+SWAPA:R11,R14
+LOAD:R7,R11
+SWAPA:R11,R14
+
+step1
+//Getting first 3 pixels
+LOAD:R3,R11
+INCA:R11
+LOAD:R4,R11
+INCA:R11
+LOAD:R5,R11
+//preparing the address
+SWAPA:R11,R
+MOVY:R1,R8
+SUB:R1,R7
+SUB:R2,R7
+MOVB:R8,R1
+MOVY:R1,R9
+ADD:R1,R7
+MOVB:R9,R2
+SWAPA:R11,R
+//Dividing the first 3 pixels in a row and getting result to r3
+MOVY:R1,R3
+DIV:R1,R9
+MOVB:R3,R2
+MOVY:R1,R4
+DIV:R1,R8
+ADD:R2,R3
+MOVB:R3,R1
+MOVY:R1,R5
+DIV:R1,R9
+ADD:R2,R3
+MOVB:R3,R1
+
+step2
+MOVY:R1,R4
+JMPZ:step3
+//moving r3 to r6
+MOVY:R1,R3
+MOVB:R6,R1
+//loading middle pixels
+LOAD:R3,R11
+INCA:R11
+LOAD:R4,R11
+INCA:R11
+LOAD:R5,R11
+//preparing the next address
+SWAPA:R11,R
+MOVY:R1,R8
+SUB:R1,R7
+SUB:R2,R7
+MOVB:R8,R1
+MOVY:R1,R9
+ADD:R1,R7
+MOVB:R9,R2
+SWAPA:R11,R
+//Dividing the pixels and getting result
+MOVY:R1,R3
+DIV:R1,R8
+ADD:R2,R6
+MOVB:R6,R1
+MOVY:R1,R4
+DIV:R1,R10
+ADD:R2,R6
+MOVB:R6,R1
+MOVY:R1,R5
+DIV:R1,R8
+ADD:R2,R6
+MOVB:R6,R1
+
+LOAD:R3,R11
+INCA:R11
+LOAD:R4,R11
+INCA:R11
+LOAD:R5,R11
+//preparing the  next address
+SWAPA:R11,R
+MOVY:R1,R8
+SUB:R1,R7
+SUB:R2,R7
+MOVB:R8,R1
+MOVY:R1,R9
+ADD:R1,R7
+MOVB:R9,R2
+SWAPA:R11,R
+//preparing the divided addition of last 3 pixels and storing it in r3
+MOVY:R1,R3
+DIV:R1,R9
+MOVB:R3,R2
+MOVY:R1,R4
+DIV:R1,R8
+ADD:R2,R3
+MOVB:R3,R1
+MOVY:R1,R5
+DIV:R1,R9
+ADD:R2,R3
+MOVB:R3,R1
+
+//getting addition of r3 and r6 and storing
+MOVY:R1,R3
+ADD:R1,R6
+MOVB:R6,R2
+STR:R12,R6
+INCA:R12
+
+//loop condition checking
+//preparing 6
+MOVY:R1,R8
+SUB:R1,R7
+SUB:R2,R7
+MOVB:R6,R1
+//preparing 128
+MOVY:R1,R8
+MUL:R1,R9
+MOVB:R5,R2
+//checking whether r12-6 divisible by 128
+SWAPA:R12,R
+MOVY:R1,R8
+SUB:R1,R6
+MOVB:R4,R2
+SUB:R2,R5
+SWAPA:R12,R
+JMPNZ:step2
+step3
+//calculation for last result in a row
+//moving r3 to r6
+MOVY:R1,R3
+MOVB:R6,R1
+//loading middle pixels
+LOAD:R3,R11
+INCA:R11
+LOAD:R4,R11
+INCA:R11
+LOAD:R5,R11
+//Dividing the pixels and getting result to r3
+MOVY:R1,R3
+DIV:R1,R9
+MOVB:R3,R2
+MOVY:R1,R4
+DIV:R1,R8
+ADD:R2,R3
+MOVB:R3,R1
+MOVY:R1,R5
+DIV:R1,R9
+ADD:R2,R3
+MOVB:R3,R1
+//preparing 3 in r2
+MOVY:R1,R10
+SUB:R1,R7
+//r6=r3*3+r6
+MUL:R2,R3
+//addition and storing
+ADD:R1,R6
+MOVB:R6,R2
+STR:R12,R6
+INCA:R12
+
+
+//preparing the next address r11 for next row
+SWAPA:R11,R
+CLEAR:R10
+//preparing 255 in r6
+CLEAR:R6
+MOVY:R1,R6
+SUB:R1,R7
+MOVB:R6,R2
+MOVY:R1,R9
+SUB:R1,R6
+MOVB:R9,R2
+SWAPA:R11,R
+
+//getting 4 back
+SWAPA:R11,R16
+LOAD:R10,R11
+SWAPA:R11,R16
+
+//loop condition checking, whether r9 zero, whether r8 is 5
+SWAPA:R11,R
+MOVY:R1,R9
+SWAPA:R11,R
+JMPZ:step1
+SWAPA:R11,R
+MOVY:R1,R10
+ADD:R1,R7
+SUB:R2,R8
+SWAPA:R11,R
+JMPNZ:step1
+
+COMO

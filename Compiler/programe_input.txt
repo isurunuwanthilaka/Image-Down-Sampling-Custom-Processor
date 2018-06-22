@@ -1,0 +1,214 @@
+//load (1,1) pixel to R3
+LOAD:R3,R11
+
+//load (2,1) pixel to R4
+SWAPA:R11,R14
+LOAD:R7,R11
+SWAPA:R11,R14
+SWAPA:R11,R
+MOVY:R1,R9
+ADD:R1,R7
+MOVB:R9,R2
+SWAPA:R11,R
+LOAD:R4,R11
+
+//load (3,1) pixel to R5
+SWAPA:R11,R
+MOVY:R1,R9
+ADD:R1,R7
+MOVB:R9,R2
+SWAPA:R11,R
+LOAD:R5,R11
+
+//set R11 to initial address
+SWAPA:R11,R
+MOVY:R1,R9
+SUB:R1,R7
+SUB:R2,R7
+MOVB:R9,R1
+SWAPA:R11,R
+
+step1
+    step2
+        //adding R3
+        CLEAR:R10
+        SWAPA:R12,R18
+        LOAD:R6,R12
+        SWAPA:R12,R18
+        MOVY:R1,R3
+        DIV:R1,R6
+        ADD:R2,R10
+        MOVB:R10,R1
+
+        //adding R4
+        SWAPA:R12,R17
+        LOAD:R6,R12
+        SWAPA:R12,R17
+        MOVY:R1,R4
+        DIV:R1,R6
+        ADD:R2,R10
+        MOVB:R10,R1
+
+        //adding R5
+        SWAPA:R12,R18
+        LOAD:R6,R12
+        SWAPA:R12,R18
+        MOVY:R1,R5
+        DIV:R1,R6
+        ADD:R2,R10
+        MOVB:R10,R1
+
+        //above center bit to R3
+        INCA:R11
+        LOAD:R3,R11
+
+        //loading ceter bit to R4
+        SWAPA:R11,R14
+        LOAD:R7,R11
+        SWAPA:R11,R14
+        SWAPA:R11,R
+        MOVY:R1,R9
+        ADD:R1,R7
+        MOVB:R9,R2
+        SWAPA:R11,R
+        LOAD:R4,R11
+
+        //loading below ceter bit to R5
+        SWAPA:R11,R
+        MOVY:R1,R9
+        ADD:R1,R7
+        MOVB:R9,R2
+        SWAPA:R11,R
+        LOAD:R5,R11
+
+        //adding R3,R4,R5 again
+        SWAPA:R12,R17
+        LOAD:R6,R12
+        SWAPA:R12,R17
+        MOVY:R1,R3
+        DIV:R1,R6
+        ADD:R2,R10
+        MOVB:R10,R1
+
+        SWAPA:R12,R16
+        LOAD:R6,R12
+        SWAPA:R12,R16
+        MOVY:R1,R4
+        DIV:R1,R6
+        ADD:R2,R10
+        MOVB:R10,R1
+
+        SWAPA:R12,R17
+        LOAD:R6,R12
+        SWAPA:R12,R17
+        MOVY:R1,R5
+        DIV:R1,R6
+        ADD:R2,R10
+        MOVB:R10,R1
+
+        //loading 9 bit to R5
+        INCA:R11
+        LOAD:R5,R11
+
+        //loading 6 bit to R4
+        SWAPA:R11,R
+        MOVY:R1,R9
+        SUB:R1,R7
+        MOVB:R9,R2
+        SWAPA:R11,R
+        LOAD:R4,R11
+
+        //loading 3 bit to R3
+        SWAPA:R11,R
+        MOVY:R1,R9
+        SUB:R1,R7
+        MOVB:R9,R2
+        SWAPA:R11,R
+        LOAD:R3,R11
+
+        //adding R3,R4,R5 again
+        SWAPA:R12,R18
+        LOAD:R6,R12
+        SWAPA:R12,R18
+        MOVY:R1,R3
+        DIV:R1,R6
+        ADD:R2,R10
+        MOVB:R10,R1
+
+        SWAPA:R12,R17
+        LOAD:R6,R12
+        SWAPA:R12,R17
+        MOVY:R1,R4
+        DIV:R1,R6
+        ADD:R2,R10
+        MOVB:R10,R1
+
+        SWAPA:R12,R18
+        LOAD:R6,R12
+        SWAPA:R12,R18
+        MOVY:R1,R5
+        DIV:R1,R6
+        ADD:R2,R10
+        MOVB:R10,R1
+
+        //store calculated bit
+        INCA:R12
+        STR:R12,R10
+        NOP
+
+        //loop condition checking
+        SWAPA:R12,R19
+        LOAD:R6,R12
+	    SWAPA:R12,R19
+        MOVY:R1,R6
+        SWAPA:R11,R
+        SUB:R1,R8
+        SWAPA:R11,R
+    JMPNZ:step2
+
+    SWAPA:R11,R
+    CLEAR:R8
+    MOVY:R1,R9
+    ADD:R1,R7
+    ADD:R2,R7
+    MOVB:R9,R1
+    SWAPA:R11,R
+
+    //load (1,1) pixel to R3
+    LOAD:R3,R11
+
+    //load (2,1) pixel to R4
+    SWAPA:R11,R
+    MOVY:R1,R9
+    ADD:R1,R7
+    MOVB:R9,R2
+    SWAPA:R11,R
+    LOAD:R4,R11
+
+    //load (3,1) pixel to R5
+    SWAPA:R11,R
+    MOVY:R1,R9
+    ADD:R1,R7
+    MOVB:R9,R2
+    SWAPA:R11,R
+    LOAD:R5,R11
+
+    //set R11 to initial address
+    SWAPA:R11,R
+    MOVY:R1,R9
+    SUB:R1,R7
+    SUB:R2,R7
+    MOVB:R9,R1
+    SWAPA:R11,R
+
+    //loop condition checking
+    SWAPA:R12,R19
+    LOAD:R6,R12
+    SWAPA:R12,R19
+    MOVY:R1,R6
+    SWAPA:R11,R
+    SUB:R1,R8
+    SWAPA:R11,R
+
+JMPNZ:step1
+COMO
